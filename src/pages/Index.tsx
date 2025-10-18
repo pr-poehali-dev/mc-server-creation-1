@@ -81,9 +81,7 @@ const Index = () => {
 
       <div className="fixed top-6 left-6 z-50 flex items-center gap-2 px-4 py-3 bg-green-500/20 border-2 border-green-500/50 rounded-lg backdrop-blur-sm">
         <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-        <span className="text-green-400 font-bold uppercase tracking-wider text-sm">
-          Сервер всегда активен
-        </span>
+        <span className="text-green-400 font-bold uppercase tracking-wider text-sm">сервер всегда активен сайт немного врёт</span>
       </div>
 
       <a
