@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const { toast } = useToast();
-  const serverAddress = 'mc.yourserver.net';
+  const [serverAddress, setServerAddress] = useState('mc.yourserver.net');
+  const [isEditing, setIsEditing] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
@@ -57,11 +59,34 @@ const Index = () => {
         <Card className="max-w-2xl mx-auto mb-12 bg-card/50 backdrop-blur-sm border-2 border-primary/30 neon-border">
           <CardContent className="p-8">
             <div className="text-center mb-6">
-              <p className="text-sm text-muted-foreground uppercase tracking-widest mb-2">Адрес сервера</p>
-              <div className="flex items-center justify-center gap-4 flex-wrap">
-                <code className="text-3xl md:text-4xl font-bold text-primary neon-glow select-all">
-                  {serverAddress}
-                </code>
+              <p className="text-sm text-muted-foreground uppercase tracking-widest mb-4">Адрес сервера</p>
+              
+              {isEditing ? (
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <Input
+                    value={serverAddress}
+                    onChange={(e) => setServerAddress(e.target.value)}
+                    className="text-2xl font-bold text-primary text-center bg-background/50 border-2 border-primary/50 neon-border max-w-md"
+                    placeholder="mc.yourserver.net"
+                  />
+                  <Button
+                    onClick={() => setIsEditing(false)}
+                    className="neon-border bg-primary/20 hover:bg-primary/40 text-primary font-bold uppercase tracking-wider transition-all"
+                    size="lg"
+                  >
+                    <Icon name="Check" className="mr-2" size={20} />
+                    Готово
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center gap-4 flex-wrap mb-4">
+                  <code className="text-3xl md:text-4xl font-bold text-primary neon-glow select-all">
+                    {serverAddress}
+                  </code>
+                </div>
+              )}
+
+              <div className="flex items-center justify-center gap-3 flex-wrap">
                 <Button
                   onClick={copyToClipboard}
                   className="neon-border-purple bg-secondary/20 hover:bg-secondary/40 text-secondary-foreground font-bold uppercase tracking-wider transition-all"
@@ -70,6 +95,17 @@ const Index = () => {
                   <Icon name={copied ? "Check" : "Copy"} className="mr-2" size={20} />
                   {copied ? 'Скопировано!' : 'Копировать'}
                 </Button>
+                {!isEditing && (
+                  <Button
+                    onClick={() => setIsEditing(true)}
+                    className="neon-border bg-primary/20 hover:bg-primary/40 text-primary font-bold uppercase tracking-wider transition-all"
+                    size="lg"
+                    variant="outline"
+                  >
+                    <Icon name="Edit" className="mr-2" size={20} />
+                    Изменить
+                  </Button>
+                )}
               </div>
             </div>
           </CardContent>
