@@ -225,7 +225,7 @@ const Index = () => {
                   Игроки онлайн
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {playersList.map((playerName: string, index: number) => (
+                  {playersList.map((player: any, index: number) => (
                     <div
                       key={index}
                       className="flex items-center gap-3 p-3 bg-background/50 rounded-lg border border-accent/20 hover:border-accent/50 transition-colors"
@@ -233,7 +233,7 @@ const Index = () => {
                       <div className="w-10 h-10 flex items-center justify-center bg-accent/20 rounded-lg neon-border-pink flex-shrink-0">
                         <Icon name="User" className="text-accent" size={20} />
                       </div>
-                      <p className="font-bold text-foreground truncate">{playerName}</p>
+                      <p className="font-bold text-foreground truncate">{player.name || player}</p>
                     </div>
                   ))}
                 </div>
