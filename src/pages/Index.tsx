@@ -83,6 +83,16 @@ const Index = () => {
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse-neon" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse-neon" style={{ animationDelay: '1s' }} />
 
+      <a
+        href="https://t.me/+sDoo4fcptANmNGYy"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-secondary/20 hover:bg-secondary/40 border-2 border-secondary/30 neon-border-purple rounded-lg transition-all hover:scale-105 group"
+      >
+        <Icon name="Send" className="text-secondary group-hover:rotate-12 transition-transform" size={24} />
+        <span className="hidden md:inline text-secondary font-bold uppercase tracking-wider">Telegram</span>
+      </a>
+
       <div className="relative z-10 container mx-auto px-4 py-12">
         <div className="text-center mb-16 animate-float">
           <h1 className="text-6xl md:text-8xl font-black mb-4 neon-glow text-primary uppercase tracking-wider">
