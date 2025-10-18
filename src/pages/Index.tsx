@@ -104,6 +104,23 @@ const Index = () => {
             <div className="text-center mb-6">
               <p className="text-sm text-muted-foreground uppercase tracking-widest mb-4">Адрес сервера</p>
               
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 ${
+                  isOnline 
+                    ? 'bg-green-500/20 border-green-500/50' 
+                    : 'bg-red-500/20 border-red-500/50'
+                }`}>
+                  <div className={`w-3 h-3 rounded-full ${
+                    isOnline ? 'bg-green-500 animate-pulse' : 'bg-red-500'
+                  }`} />
+                  <span className={`font-bold uppercase tracking-wider ${
+                    isOnline ? 'text-green-400' : 'text-red-400'
+                  }`}>
+                    {isOnline ? 'Онлайн' : 'Офлайн'}
+                  </span>
+                </div>
+              </div>
+
               {isEditing ? (
                 <div className="flex items-center justify-center gap-3 mb-4">
                   <Input
