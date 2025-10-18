@@ -79,6 +79,13 @@ const Index = () => {
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse-neon" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse-neon" style={{ animationDelay: '1s' }} />
 
+      <div className="fixed top-6 left-6 z-50 flex items-center gap-2 px-4 py-3 bg-green-500/20 border-2 border-green-500/50 rounded-lg backdrop-blur-sm">
+        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+        <span className="text-green-400 font-bold uppercase tracking-wider text-sm">
+          Сервер всегда активен
+        </span>
+      </div>
+
       <a
         href="https://t.me/+sDoo4fcptANmNGYy"
         target="_blank"
