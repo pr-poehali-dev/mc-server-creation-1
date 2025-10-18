@@ -59,7 +59,7 @@ const Index = () => {
 
   const onlinePlayers = serverStatus?.players?.online || 0;
   const maxPlayers = serverStatus?.players?.max || 0;
-  const version = serverStatus?.version || 'N/A';
+  const version = serverStatus?.version || '1.21.8';
   const motd = serverStatus?.motd?.clean?.[0] || 'Minecraft Server';
 
   const topPlayers = [
