@@ -62,12 +62,8 @@ const Index = () => {
   const version = serverStatus?.version || '1.21.8';
   const motd = serverStatus?.motd?.clean?.[0] || 'Minecraft Server';
 
-  const topPlayers = [
-    { name: 'Steve_Pro', kills: 1542, level: 89 },
-    { name: 'Herobrine', kills: 1399, level: 85 },
-    { name: 'CraftMaster', kills: 1287, level: 82 },
-    { name: 'DiamondHunter', kills: 1156, level: 78 },
-  ];
+  const playersList = serverStatus?.players?.list || [];
+  const hasPlayers = playersList.length > 0;
 
   const stats = [
     { label: 'Игроки онлайн', value: isOnline ? `${onlinePlayers}/${maxPlayers}` : 'Оффлайн', icon: 'Users' },
@@ -197,36 +193,45 @@ const Index = () => {
             ))}
           </div>
 
-          <Card className="bg-card/50 backdrop-blur-sm border-2 border-accent/30 neon-border-pink">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-center mb-6 text-accent neon-glow uppercase tracking-wider">
-                <Icon name="Trophy" className="inline mr-2" size={28} />
-                Топ игроков
-              </h3>
-              <div className="space-y-4">
-                {topPlayers.map((player, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-4 bg-background/50 rounded-lg border border-accent/20 hover:border-accent/50 transition-colors"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 flex items-center justify-center bg-accent/20 rounded-lg neon-border-pink">
-                        <span className="text-2xl font-bold text-accent">#{index + 1}</span>
+          {isOnline && hasPlayers && (
+            <Card className="bg-card/50 backdrop-blur-sm border-2 border-accent/30 neon-border-pink mb-12">
+              <CardContent className="p-8">
+                <h3 className="text-2xl font-bold text-center mb-6 text-accent neon-glow uppercase tracking-wider">
+                  <Icon name="Users" className="inline mr-2" size={28} />
+                  Игроки онлайн
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {playersList.map((playerName: string, index: number) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-3 p-3 bg-background/50 rounded-lg border border-accent/20 hover:border-accent/50 transition-colors"
+                    >
+                      <div className="w-10 h-10 flex items-center justify-center bg-accent/20 rounded-lg neon-border-pink flex-shrink-0">
+                        <Icon name="User" className="text-accent" size={20} />
                       </div>
-                      <div>
-                        <p className="font-bold text-lg text-foreground">{player.name}</p>
-                        <p className="text-sm text-muted-foreground">Уровень {player.level}</p>
-                      </div>
+                      <p className="font-bold text-foreground truncate">{playerName}</p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm text-muted-foreground uppercase tracking-wide">Убийств</p>
-                      <p className="text-2xl font-bold text-accent">{player.kills}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {isOnline && serverStatus?.motd?.html && (
+            <Card className="bg-card/50 backdrop-blur-sm border-2 border-primary/30 neon-border">
+              <CardContent className="p-8">
+                <h3 className="text-2xl font-bold text-center mb-4 text-primary neon-glow uppercase tracking-wider">
+                  <Icon name="Info" className="inline mr-2" size={28} />
+                  О сервере
+                </h3>
+                <div className="text-center text-foreground/80">
+                  {serverStatus.motd.clean.map((line: string, i: number) => (
+                    <p key={i} className="text-lg mb-1">{line}</p>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         <div className="text-center">
