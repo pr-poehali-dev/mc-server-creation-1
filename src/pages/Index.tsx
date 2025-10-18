@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const { toast } = useToast();
-  const [serverAddress, setServerAddress] = useState('_timofey4ik_.aternos.me');
+  const [serverAddress, setServerAddress] = useState('cuis.aternos.host:38608');
   const [isEditing, setIsEditing] = useState(false);
   const [copied, setCopied] = useState(false);
   const [serverStatus, setServerStatus] = useState<any>(null);
