@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -7,9 +7,45 @@ import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const { toast } = useToast();
-  const [serverAddress, setServerAddress] = useState('mc.yourserver.net');
+  const [serverAddress, setServerAddress] = useState('mc.hypixel.net');
   const [isEditing, setIsEditing] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [serverStatus, setServerStatus] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isOnline, setIsOnline] = useState(false);
+
+  const checkServerStatus = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`https://api.mcsrvstat.us/3/${serverAddress}`);
+      const data = await response.json();
+      setServerStatus(data);
+      setIsOnline(data.online || false);
+      
+      if (!data.online) {
+        toast({
+          title: "Сервер оффлайн",
+          description: "Не удалось подключиться к серверу",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Ошибка",
+        description: "Не удалось проверить статус сервера",
+        variant: "destructive"
+      });
+      setIsOnline(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    checkServerStatus();
+    const interval = setInterval(checkServerStatus, 30000);
+    return () => clearInterval(interval);
+  }, [serverAddress]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(serverAddress);
@@ -21,9 +57,10 @@ const Index = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const onlinePlayers = 127;
-  const maxPlayers = 500;
-  const serverUptime = '99.9%';
+  const onlinePlayers = serverStatus?.players?.online || 0;
+  const maxPlayers = serverStatus?.players?.max || 0;
+  const version = serverStatus?.version || 'N/A';
+  const motd = serverStatus?.motd?.clean?.[0] || 'Minecraft Server';
 
   const topPlayers = [
     { name: 'Steve_Pro', kills: 1542, level: 89 },
@@ -33,10 +70,10 @@ const Index = () => {
   ];
 
   const stats = [
-    { label: 'Игроки онлайн', value: `${onlinePlayers}/${maxPlayers}`, icon: 'Users' },
-    { label: 'Uptime', value: serverUptime, icon: 'Activity' },
-    { label: 'Режим игры', value: 'Survival', icon: 'Swords' },
-    { label: 'Версия', value: '1.20.4', icon: 'Package' },
+    { label: 'Игроки онлайн', value: isOnline ? `${onlinePlayers}/${maxPlayers}` : 'Оффлайн', icon: 'Users' },
+    { label: 'Статус', value: isOnline ? 'Онлайн' : 'Оффлайн', icon: 'Activity' },
+    { label: 'Протокол', value: serverStatus?.protocol?.name || 'N/A', icon: 'Wifi' },
+    { label: 'Версия', value: version, icon: 'Package' },
   ];
 
   return (
@@ -70,7 +107,10 @@ const Index = () => {
                     placeholder="mc.yourserver.net"
                   />
                   <Button
-                    onClick={() => setIsEditing(false)}
+                    onClick={() => {
+                      setIsEditing(false);
+                      checkServerStatus();
+                    }}
                     className="neon-border bg-primary/20 hover:bg-primary/40 text-primary font-bold uppercase tracking-wider transition-all"
                     size="lg"
                   >
@@ -106,6 +146,16 @@ const Index = () => {
                     Изменить
                   </Button>
                 )}
+                <Button
+                  onClick={checkServerStatus}
+                  disabled={isLoading}
+                  className="neon-border-pink bg-accent/20 hover:bg-accent/40 text-accent font-bold uppercase tracking-wider transition-all"
+                  size="lg"
+                  variant="outline"
+                >
+                  <Icon name={isLoading ? "Loader2" : "RefreshCw"} className={`mr-2 ${isLoading ? 'animate-spin' : ''}`} size={20} />
+                  Обновить
+                </Button>
               </div>
             </div>
           </CardContent>
@@ -171,9 +221,14 @@ const Index = () => {
 
         <div className="text-center">
           <div className="inline-flex items-center gap-2 text-muted-foreground">
-            <div className="w-3 h-3 bg-primary rounded-full animate-pulse-neon" />
-            <p className="text-sm uppercase tracking-wider">Сервер онлайн</p>
+            <div className={`w-3 h-3 rounded-full animate-pulse-neon ${isOnline ? 'bg-primary' : 'bg-destructive'}`} />
+            <p className="text-sm uppercase tracking-wider">
+              Сервер {isOnline ? 'онлайн' : 'оффлайн'}
+            </p>
           </div>
+          {motd && isOnline && (
+            <p className="text-xs text-muted-foreground mt-2 max-w-md mx-auto">{motd}</p>
+          )}
         </div>
       </div>
     </div>
